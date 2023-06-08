@@ -32,15 +32,16 @@ class Controller:
 
             # Determine the carrier's extension and call the appropriate encoding function
             extension = (filepath.split('.'))[1]
+            select_output_path = partial(select_output_path, extension)
             match extension:
                 case "png":
-                    ImageType.encode(filepath, final_message, nr_lsb_used, partial(select_output_path, extension))
+                    ImageType.encode(filepath, final_message, nr_lsb_used, select_output_path)
                 case "jpg":
-                    ImageType.encode(filepath, final_message, nr_lsb_used, partial(select_output_path, extension))
+                    ImageType.encode(filepath, final_message, nr_lsb_used, select_output_path)
                 case "wav":
-                    WavType.encode(filepath, final_message, nr_lsb_used, partial(select_output_path, extension))
+                    WavType.encode(filepath, final_message, nr_lsb_used, select_output_path)
                 case "mp4":
-                    VideoType.encode(filepath, final_message, nr_lsb_used, partial(select_output_path, extension))
+                    VideoType.encode(filepath, final_message, nr_lsb_used, select_output_path)
                 case default:
                     raise ValueError(f"Unable to support encoding for {extension} files!")
         except Exception as e:
