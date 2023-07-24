@@ -1,10 +1,11 @@
 import zlib
 
-from ImageType import ImageType
-from WavType import WavType
-from VideoType import VideoType
-from OneTimePad import OneTimePad
 from functools import partial
+from ImageType import ImageType
+from OneTimePad import OneTimePad
+from typing import Callable
+from VideoType import VideoType
+from WavType import WavType
 
 """
 [1, 9]
@@ -17,7 +18,14 @@ class Controller:
     def __init__(self) -> None:
         pass
 
-    def handle_encode(self, filepath, secret_message, nr_lsb_used, apply_encryption, select_output_path):
+    def handle_encode(
+        self,
+        filepath: str,
+        secret_message: str,
+        nr_lsb_used: int,
+        apply_encryption: bool,
+        select_output_path: Callable
+        ):
         exception = None
         mask = None
         try:
@@ -50,10 +58,16 @@ class Controller:
         
         return mask, exception
 
-    def handle_decode(self, filepath, nr_lsb_used, mask):
+    def handle_decode(
+        self,
+        filepath: str,
+        nr_lsb_used: int,
+        mask: bytes
+        ):
         exception = None
         decompressed_message = None
         try:
+            # Determine the carrier's extension and call the appropriate decoding function
             extension = (filepath.split('.'))[1]
             match extension:
                 case "png":
@@ -66,7 +80,8 @@ class Controller:
                     secret_message = VideoType.decode(filepath, nr_lsb_used)
                 case default:
                     raise ValueError(f"Unable to support decoding for {extension} files!")
-                
+            
+            # Decrypt the message if a valid mask is given
             if len(mask):
                 if len(mask) != len(secret_message):
                     raise ValueError(f"The length of the mask({len(mask)}) doesn't match with the length of the message ({len(secret_message)})!")
@@ -75,6 +90,7 @@ class Controller:
             else:
                 decrypted_message = secret_message
             
+            # Decompress the message
             decompressed_message = zlib.decompress(decrypted_message)
 
         except Exception as e:

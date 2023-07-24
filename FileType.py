@@ -39,6 +39,10 @@ class FileType:
         secret_message: bytes,
         bytes_available: int
     ) -> List[np.uint8]:
+        """
+        Returns the modified carrier bytes after the secret message has been encoded inside with
+        the skip bytes feature enabled.
+        """
         message_length = len(secret_message)
         skip = 0
         while skip * (message_length * 8 - 1) + len(secret_message) * 8 <= bytes_available:
@@ -81,6 +85,9 @@ class FileType:
         secret_message: bytes,
         nr_lsb_used: int
     ) -> List[np.uint8]:
+        """
+        Returns the modified carrier bytes after the secret message has been encoded inside.
+        """
         rightmost_bit_index = int(ceil(len(secret_message) * 8 / nr_lsb_used))
         carrier_bytes = np.array(carrier[:rightmost_bit_index], dtype=np.uint8).tobytes()
         
@@ -90,8 +97,13 @@ class FileType:
 
     @staticmethod
     def decode_message_from_carrier(
-        carrier: List[np.uint8], message_len_in_bits: int, nr_lsb_used: int
+        carrier: List[np.uint8],
+        message_len_in_bits: int,
+        nr_lsb_used: int
     ) -> bytes:
+        """
+        Returns the bytes of te secret message stored inside the carrier bytes.
+        """
         message_len_in_bytes = int(ceil(message_len_in_bits / nr_lsb_used))
         carrier_bytes = np.array(carrier[:message_len_in_bytes], dtype=np.uint8).tobytes()
         message_bits = np.unpackbits(
@@ -101,8 +113,13 @@ class FileType:
     
     @staticmethod
     def decode_message_from_carrier_skip(
-        carrier: List[np.uint8], message_len_in_bits: int, bytes_available: int
+        carrier: List[np.uint8],
+        message_len_in_bits: int,
+        bytes_available: int
     ) -> bytes:
+        """
+        Returns the bytes of the secret message stored inside the carrier bytes with the skip bytes feature enabled.
+        """
         skip = 0
         while skip * (message_len_in_bits - 1) + message_len_in_bits <= bytes_available:
             skip += 1
@@ -116,7 +133,14 @@ class FileType:
         return np.packbits(message_bits).tobytes()[: message_len_in_bits // 8]
 
     @staticmethod
-    def skip_carrier_bytes(carrier_bytes, skip_over):
+    def skip_carrier_bytes(
+        carrier_bytes: bytes,
+        skip_over: int
+    ) -> bytes:
+        """
+        Returns the bytes of the carrier that actually contain bits from the secret message,
+        jumping over 'skip_over' unmodified bytes.
+        """
         temp = bytearray()
         for index in range(0, len(carrier_bytes), skip_over + 1):
             temp.append(carrier_bytes[index])

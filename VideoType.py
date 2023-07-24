@@ -92,7 +92,7 @@ class VideoType(FileType):
         maximum_bytes_in_video = nr_bytes_available - file_size
 
         if bytes_to_recover > maximum_bytes_in_video:
-            raise ValueError("No secret message hidden in this video with this app, or audio is corrupted!")
+            raise ValueError("No secret message hidden in this video with this app, or the video is corrupted!")
 
         temp = FileType.decode_message_from_carrier(video_frames,
                                                     8 * (bytes_to_recover + file_size), nr_lsb_used)[file_size:]
