@@ -2,6 +2,7 @@ from PIL import Image
 from FileType import FileType
 from typing import List, cast
 from math import ceil
+from typing import Callable
 import sys
 
 COMPRESSION_LEVEL = 1
@@ -16,7 +17,7 @@ class ImageType(FileType):
         input_image_path: str,
         secret_message: bytes,
         nr_lsb_used: int,
-        select_output_path
+        select_output_path: Callable[[], str]
     ) -> None:
         image = Image.open(input_image_path)
         image = ImageType.encode_message_in_image(image, secret_message, nr_lsb_used)

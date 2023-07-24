@@ -1,5 +1,6 @@
 from FileType import FileType
 from math import ceil
+from typing import Callable
 import sys
 import wave
 
@@ -12,7 +13,7 @@ class WavType(FileType):
         input_audio_path: str,
         secret_message: bytes,
         nr_lsb_used: int,
-        select_output_path
+        select_output_path: Callable[[], str]
     ) -> None:
 
         audio = wave.open(input_audio_path, "r")

@@ -26,10 +26,10 @@ class FileType:
             np.frombuffer(carrier, dtype=np.uint8, count=new_secret_message_len_in_bytes).view(np.uint8)
         ).reshape(new_secret_message_len_in_bytes, 8)
 
-        j = 0
-        for i in range(0, len(carrier_bits), (skip_over + 1)):
-            carrier_bits[i][7] = payload_bits[j]
-            j += 1
+        payload_index = 0
+        for carrier_index in range(0, len(carrier_bits), (skip_over + 1)):
+            carrier_bits[carrier_index][7] = payload_bits[payload_index]
+            payload_index += 1
         
         return np.packbits(carrier_bits).tobytes() + carrier[new_secret_message_len_in_bytes:]
     
@@ -93,8 +93,8 @@ class FileType:
         carrier: List[np.uint8], message_len_in_bits: int, nr_lsb_used: int
     ) -> bytes:
         message_len_in_bytes = int(ceil(message_len_in_bits / nr_lsb_used))
+        print(str(message_len_in_bytes))
         carrier_bytes = np.array(carrier[:message_len_in_bytes], dtype=np.uint8).tobytes()
-
         message_bits = np.unpackbits(
             np.frombuffer(carrier_bytes, dtype=np.uint8, count=message_len_in_bytes).view(np.uint8)
         ).reshape(message_len_in_bytes, 8)[:, 8 - nr_lsb_used : 8]

@@ -61,6 +61,8 @@ class Controller:
                     secret_message = ImageType.decode(filepath, nr_lsb_used)
                 case "wav":
                     secret_message = WavType.decode(filepath, nr_lsb_used)
+                case "mp4":
+                    secret_message = VideoType.decode(filepath, nr_lsb_used)
                 case default:
                     raise ValueError(f"Unable to support decoding for {extension} files!")
                 
