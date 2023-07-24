@@ -1,10 +1,9 @@
-import tkinter
 import tkinter.messagebox
 import customtkinter
-from tkinter import filedialog
 import pyperclip
-from functools import partial
 
+from tkinter import filedialog
+from functools import partial
 from Controller import Controller
 
 customtkinter.set_appearance_mode("Dark")  # Modes: "System" (standard), "Dark", "Light"

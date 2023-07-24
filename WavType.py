@@ -1,8 +1,9 @@
+import sys
+import wave
+
 from FileType import FileType
 from math import ceil
 from typing import Callable
-import sys
-import wave
 
 class WavType(FileType):
     def __init__(self):

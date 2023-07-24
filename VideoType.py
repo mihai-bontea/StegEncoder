@@ -1,9 +1,10 @@
-from FileType import FileType
-import numpy as np
-from typing import Callable
-from math import ceil
 import cv2
 import sys
+
+from FileType import FileType
+from math import ceil
+from typing import Callable
+import numpy as np
 
 class VideoType(FileType):
     def __init__(self):
@@ -48,8 +49,6 @@ class VideoType(FileType):
         fps = cap.get(cv2.CAP_PROP_FPS)
         width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH ))
         height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT ))
-        print("{}x{}".format(width, height))
-        print(type(width))
 
         try:
             out = cv2.VideoWriter(output_file_path, fourcc, fps, (width, height))

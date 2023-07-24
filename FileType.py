@@ -93,7 +93,6 @@ class FileType:
         carrier: List[np.uint8], message_len_in_bits: int, nr_lsb_used: int
     ) -> bytes:
         message_len_in_bytes = int(ceil(message_len_in_bits / nr_lsb_used))
-        print(str(message_len_in_bytes))
         carrier_bytes = np.array(carrier[:message_len_in_bytes], dtype=np.uint8).tobytes()
         message_bits = np.unpackbits(
             np.frombuffer(carrier_bytes, dtype=np.uint8, count=message_len_in_bytes).view(np.uint8)

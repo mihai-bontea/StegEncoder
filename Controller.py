@@ -1,8 +1,9 @@
+import zlib
+
 from ImageType import ImageType
 from WavType import WavType
 from VideoType import VideoType
 from OneTimePad import OneTimePad
-import zlib
 from functools import partial
 
 """

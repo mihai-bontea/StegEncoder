@@ -1,9 +1,10 @@
-from PIL import Image
-from FileType import FileType
-from typing import List, cast
-from math import ceil
-from typing import Callable
 import sys
+
+from FileType import FileType
+from math import ceil
+from PIL import Image
+from typing import Callable
+from typing import List, cast
 
 COMPRESSION_LEVEL = 1
 USE_BYTE_SKIP = True
