@@ -6,8 +6,6 @@ import numpy as np
 SKIP_BYTES = True
 
 class FileType:
-    def __init__(self):
-        pass
     
     @staticmethod
     def encode_message_in_carrier_bytes_skip(

@@ -8,8 +8,6 @@ from typing import Callable
 USE_BYTE_SKIP = True
 
 class WavType(FileType):
-    def __init__(self):
-        pass
     
     @staticmethod
     def encode(

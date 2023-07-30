@@ -10,8 +10,6 @@ COMPRESSION_LEVEL = 1
 USE_BYTE_SKIP = True
 
 class ImageType(FileType):
-    def __init__(self):
-        pass
     
     @staticmethod
     def encode(

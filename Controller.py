@@ -15,9 +15,7 @@ The higher the number the smaller the resulted message
 COMPRESSION_LEVEL = 9
 
 class Controller:
-    def __init__(self) -> None:
-        pass
-
+    
     def handle_encode(
         self,
         filepath: str,

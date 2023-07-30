@@ -7,8 +7,6 @@ from typing import Callable
 import numpy as np
 
 class VideoType(FileType):
-    def __init__(self):
-        pass
 
     @staticmethod
     def encode(
