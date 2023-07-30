@@ -49,11 +49,11 @@ class ImageType(FileType):
         
         if nr_lsb_used == 1 and USE_BYTE_SKIP:
             maximum_bytes_in_image = max_bytes_to_encode - max_bytes_to_encode.bit_length()
-            color_data = ImageType.encode_message_in_carrrier_list(color_data, final_message, 1)
-            color_data[max_bytes_to_encode.bit_length() * 8:] = ImageType.encode_message_in_carrier_list_skip(
+            color_data = FileType.encode_message_in_carrier_list(color_data, final_message, 1)
+            color_data[max_bytes_to_encode.bit_length() * 8:] = FileType.encode_message_in_carrier_list_skip(
                 color_data[max_bytes_to_encode.bit_length() * 8:], secret_message, maximum_bytes_in_image)
         else:
-            color_data = ImageType.encode_message_in_carrrier_list(color_data, final_message, nr_lsb_used)
+            color_data = FileType.encode_message_in_carrier_list(color_data, final_message, nr_lsb_used)
 
         input_image.putdata(
             cast(List[int], list(zip(*[iter(color_data)] * len(input_image.getdata()[0]))))
@@ -82,7 +82,7 @@ class ImageType(FileType):
         rightmost_bit_index = int(ceil(8 * file_size / nr_lsb_used))
 
         bytes_to_recover = int.from_bytes(
-            ImageType.decode_message_from_carrier(
+            FileType.decode_message_from_carrier(
                 color_data[:rightmost_bit_index], rightmost_bit_index, nr_lsb_used
             ),
             byteorder=sys.byteorder,
@@ -94,10 +94,10 @@ class ImageType(FileType):
             raise ValueError("No secret message hidden in this image with this app, or image is corrupted!")
         
         if nr_lsb_used == 1 and USE_BYTE_SKIP:
-            return ImageType.decode_message_from_carrier_skip(color_data[file_size * 8:],
+            return FileType.decode_message_from_carrier_skip(color_data[file_size * 8:],
                                                               8 * (bytes_to_recover), maximum_bytes_in_image)
         else:
-            return ImageType.decode_message_from_carrier(color_data[file_size * 8 / nr_lsb_used:],
+            return FileType.decode_message_from_carrier(color_data[file_size * 8 / nr_lsb_used:],
                                                         8 * (bytes_to_recover), nr_lsb_used)
 
         

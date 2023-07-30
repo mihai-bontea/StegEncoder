@@ -80,7 +80,7 @@ class FileType:
         return np.packbits(carrier_bits).tobytes() + carrier[bytes_modified :]
 
     @staticmethod
-    def encode_message_in_carrrier_list(
+    def encode_message_in_carrier_list(
         carrier: List[np.uint8],
         secret_message: bytes,
         nr_lsb_used: int

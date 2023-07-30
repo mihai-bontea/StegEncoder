@@ -5,6 +5,8 @@ from FileType import FileType
 from math import ceil
 from typing import Callable
 
+USE_BYTE_SKIP = True
+
 class WavType(FileType):
     def __init__(self):
         pass
@@ -38,7 +40,14 @@ class WavType(FileType):
             raise ValueError("Unsupported for bit-depth above 1")
         
         audio_frames = [t for t in audio.readframes(nr_frames)]
-        audio_frames = FileType.encode_message_in_carrrier_list(audio_frames, final_message, nr_lsb_used)
+
+        if nr_lsb_used == 1 and USE_BYTE_SKIP:
+            maximum_bytes_in_audio = nr_bytes_available - nr_bytes_available.bit_length()
+            audio_frames = FileType.encode_message_in_carrier_list(audio_frames, file_size, 1)
+            audio_frames[nr_bytes_available.bit_length() * 8:] = FileType.encode_message_in_carrier_list_skip(
+                audio_frames[nr_bytes_available.bit_length() * 8:], secret_message, maximum_bytes_in_audio)
+        else:
+            audio_frames = FileType.encode_message_in_carrier_list(audio_frames, final_message, nr_lsb_used)
 
         encoded_audio = wave.open(select_output_path(), "w")
         encoded_audio.setparams(audio.getparams())
@@ -73,6 +82,10 @@ class WavType(FileType):
 
         if bytes_to_recover > maximum_bytes_in_audio:
             raise ValueError("No secret message hidden in this audio with this app, or audio is corrupted!")
-
-        return FileType.decode_message_from_carrier(audio_frames,
-                                                    8 * (bytes_to_recover + file_size), nr_lsb_used)[file_size:]
+        
+        if nr_lsb_used == 1 and USE_BYTE_SKIP:
+            return FileType.decode_message_from_carrier_skip(audio_frames[file_size * 8:],
+                                                              8 * (bytes_to_recover), maximum_bytes_in_audio)
+        else:
+            return FileType.decode_message_from_carrier(audio_frames,
+                                                        8 * (bytes_to_recover + file_size), nr_lsb_used)[file_size:]
