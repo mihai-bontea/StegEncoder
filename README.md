@@ -33,3 +33,10 @@ Similarly to the encode tab, the user must select a file and the number of LSBs 
 
 ![gui3](https://github.com/mihai-bontea/StegEncoder/assets/79721547/70fb2f2d-7274-47cc-aee9-d1d9fb618d86)
 
+## Architecture
+
+The application is written with the Model-View-Controller design pattern in mind. The model, namely, the part of the application responsible for managing and manipulating the data is comprised of the WavType, ImageType, VideoType, FileType and OneTimePad classes.
+
+The main functions responsible for changing/retrieving the LSBs of a byte stream are contained within FileType. Beyond that, each new file type added must only implement the means of retrieving the modifiable bytes and of writing them to a file, making it simple to add new functionality.
+
+![image](https://github.com/mihai-bontea/StegEncoder/assets/79721547/e6d6ea62-7ee6-476e-aefc-56c81ccabcbb)
